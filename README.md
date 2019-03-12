@@ -1,0 +1,2 @@
+# Nihonoari
+C++ Hiragana Test
