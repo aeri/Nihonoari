@@ -3,7 +3,7 @@
 </p>
 
 # Project Nihonoari
-This is a very simple and small program to train the japanese hiragana character set. The operative is very easy, only appears randomly hiragana characters and you answer with the romaji transliteration. You can stop the program in any momment to view the stats of your answers.
+This is a very simple and small program to train the japanese hiragana and katakana character set. The operative is very easy, only appears randomly hiragana or katakana characters depending on user selection and you answer with the romaji transliteration. You can stop the program in any momment to view the stats of your answers.
 
 ## Getting Started
 
@@ -87,4 +87,4 @@ You have failed 1 questions
 
 ## License
 
-This project is unlicensed
+This project is unlicensed motivated exclusively for personal learning of Japanese.
