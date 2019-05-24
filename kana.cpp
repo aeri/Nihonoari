@@ -4,13 +4,110 @@
 //   / / / / / / / / /_/ / / / / /_/ / /_/ / /  / /
 //  /_/ /_/_/_/ /_/\____/_/ /_/\____/\__,_/_/  /_/
 //
-#include <bits/stdc++.h>
+
 #include <ctime>
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <bits/stdc++.h>
+#include <cstdlib>
 
 using namespace std;
+
+const int KANA = 71;
+
+void swap(int* a, int* b, string* A, string* B)
+{
+    int t = *a;
+    string T = *A;
+    *a = *b;
+    *A = *B;
+    *b = t;
+    *B = T;
+}
+
+/* This function takes last element as pivot, places
+   the pivot element at its correct position in sorted
+    array, and places all smaller (smaller than pivot)
+   to left of pivot and all greater elements to right
+   of pivot */
+int partition(string arr[], int arr2[], int low, int high)
+{
+    int pivot = arr2[high];  // pivot
+    int i = (low - 1);       // Index of smaller element
+
+    for(int j = low; j <= high - 1; j++)
+	{
+	    // If current element is smaller than or
+	    // equal to pivot
+	    if(arr2[j] <= pivot)
+		{
+		    i++;  // increment index of smaller element
+		    swap(&arr2[i], &arr2[j], &arr[i], &arr[j]);
+		}
+	}
+    swap(&arr2[i + 1], &arr2[high], &arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+/* The main function that implements QuickSort
+ arr[] --> Array to be sorted,
+  low  --> Starting index,
+  high  --> Ending index */
+void quickSort(string arr[], int arr2[], int low, int high)
+{
+    if(low < high)
+	{
+	    /* pi is partitioning index, arr[p] is now
+	       at right place */
+	    int pi = partition(arr, arr2, low, high);
+
+	    // Separately sort elements before
+	    // partition and after partition
+	    quickSort(arr, arr2, low, pi - 1);
+	    quickSort(arr, arr2, pi + 1, high);
+	}
+}
+
+void addFail(string failed[], int nFailed[], const string kana)
+{
+    int i = 0;
+    bool inserted = false;
+    while(i <= 70 && not inserted)
+	{
+	    if(failed[i] == kana)
+		{
+		    inserted = true;
+		    ++nFailed[i];
+		}
+	    else if(failed[i] == "")
+		{
+		    failed[i] = kana;
+		    nFailed[i] = 1;
+		    inserted = true;
+		}
+	    else
+		{
+		    ++i;
+		}
+	}
+}
+
+void showFail(string failed[], int nFailed[])
+{
+    int i = 0;
+    while(nFailed[i] != 0)
+	{
+	    i++;
+	}
+    quickSort(failed, nFailed, 0, i - 1);
+    while(i > 0)
+	{
+	    --i;
+	    cout << nFailed[i] << ". " << failed[i] << endl;
+	}
+    cout << endl;
+}
 
 int main()
 {
@@ -19,19 +116,19 @@ int main()
     int mode;
     bool hk;
     bool valid = false;
-    cout << "nihonoari [Version 1.0]" << endl;
-	cout << "github.com/aeri" << endl;
-	cout << "This is free and unencumbered software released into the public domain." << endl << endl;
+    cout << "Project nihonoari [Version 1.1]" << endl;
+    cout << "github.com/aeri" << endl;
+    cout << "This is free and unencumbered software released into the public domain." << endl << endl;
     cout << "Write \"STOP\" to end the test" << endl << endl;
     do
 	{
-		// Mode selecion
+	    // Mode selecion
 	    cout << "0	-->	All" << endl;
 	    cout << "1	-->	Hiragana" << endl;
 	    cout << "2	-->	Katakana" << endl << endl;
 	    cin >> mode;
 
-		//Ignore not valid options
+	    // Ignore not valid options
 	    if(cin.fail())
 		{
 		    mode = -1;
@@ -64,9 +161,12 @@ int main()
     int fallos = 0;
     bool stop = false;
     string entrada;
-    string hiragana[71];
-    string romaji[71];
-    string katakana[71];
+    string hiragana[KANA];
+    string romaji[KANA];
+    string katakana[KANA];
+
+    string failed[200];
+    int nFailed[200];
 
     // Polulate phase
 
@@ -355,29 +455,31 @@ int main()
     romaji[70] = "po";
 
     // Populated phase finished
-
+    int counter = 1;
     while(!stop)
 	{
-	    valor = rand() % 71;
+	    valor = rand() % KANA;
 
 	    switch(mode)
 		{
 		case 1:
-		    cout << hiragana[valor] << endl;
+		    cout << counter << ". " << hiragana[valor] << endl;
+		    hk = 0;
 		    break;
 		case 2:
-		    cout << katakana[valor] << endl;
+		    cout << counter << ". " << katakana[valor] << endl;
+		    hk = 1;
 		    break;
 		default:
 		    // Hiragana or Katakana
 		    hk = rand() % 2;
 		    if(hk)
 			{
-			    cout << katakana[valor] << endl;
+			    cout << counter << ". " << katakana[valor] << endl;
 			}
 		    else
 			{
-			    cout << hiragana[valor] << endl;
+			    cout << counter << ". " << hiragana[valor] << endl;
 			}
 		}
 	    cin >> entrada;
@@ -400,11 +502,24 @@ int main()
 		{
 		    cout << "	ERROR -> " << romaji[valor] << endl;
 		    ++fallos;
+		    if(hk)
+			{
+			    addFail(failed, nFailed, katakana[valor]);
+			}
+		    else
+			{
+			    addFail(failed, nFailed, hiragana[valor]);
+			}
 		}
+	    ++counter;
 	}
     // Calculate and show stats
     cout << "You passed " << aciertos << " questions" << endl;
     cout << "You have failed " << fallos << " questions" << endl;
+    if(fallos >= 1)
+	{
+	    showFail(failed, nFailed);
+	}
     float suma = aciertos + fallos;
     float parte;
     if(suma == 0)

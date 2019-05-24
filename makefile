@@ -7,3 +7,4 @@ kana: kana.cpp
 
 clean:
 	rm -rf *.o
+	rm kana
