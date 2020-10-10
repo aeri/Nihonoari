@@ -331,7 +331,7 @@ int main()
     romaji[39] = "ra";
 
     hiragana[40] = "り";
-    katakana[40] = "り";
+    katakana[40] = "リ";
     romaji[40] = "ri";
 
     hiragana[41] = "る";
@@ -400,11 +400,11 @@ int main()
 
     hiragana[57] = "ぢ";
     katakana[57] = "ヂ";
-    romaji[57] = "dji";
+    romaji[57] = "ji";
 
     hiragana[58] = "づ";
     katakana[58] = "ヅ";
-    romaji[58] = "dzu";
+    romaji[58] = "zu";
 
     hiragana[59] = "で";
     katakana[59] = "デ";
